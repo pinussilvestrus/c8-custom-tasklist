@@ -21,4 +21,4 @@ function mergePathname(prefix, pathname) {
   return `${prefix}/${pathname}`;
 }
 
-export {mergePathname};
+export { mergePathname };

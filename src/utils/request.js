@@ -1,6 +1,12 @@
+import { api } from '../api';
+
 export async function request(input) {
   try {
-    const response = await fetch(input);
+
+    // auth first
+    const authRequest = await auth(input);
+
+    const response = await fetch(authRequest);
 
     if (response.ok) {
       return {
@@ -27,4 +33,25 @@ export async function request(input) {
       }
     };
   }
+}
+
+async function auth(request) {
+  const authResponse = await fetch(api.auth());
+
+  if (!authResponse.ok) {
+    return {
+      response: null,
+      error: {
+        authResponse,
+        networkError: null,
+        variant: 'failed-auth'
+      }
+    };
+  }
+
+  const authData = await authResponse.json();
+  const token = authData.access_token;
+  request.headers.set('Authorization', 'Bearer ' + token);
+
+  return request;
 }
