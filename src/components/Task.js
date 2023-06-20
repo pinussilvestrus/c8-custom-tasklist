@@ -10,8 +10,11 @@ import Typography from '@mui/material/Typography';
 
 import FormDialog from './FormDialog';
 
-import { useAssignTask } from '../mutations';
-import { useUnassignTask } from '../mutations';
+import {
+  useAssignTask,
+  useCompleteTask,
+  useUnassignTask
+} from '../mutations';
 
 export default function Task(props) {
   const { task } = props;
@@ -20,6 +23,7 @@ export default function Task(props) {
 
   const { mutateAsync: assignTask } = useAssignTask();
   const { mutateAsync: unassignTask } = useUnassignTask();
+  const { mutateAsync: completeTask } = useCompleteTask();
 
   const handleOpenDialog = () => {
     setDialogOpen(true);
@@ -32,7 +36,24 @@ export default function Task(props) {
   const handleCompleteTask = (event) => {
     console.log('submit', event);
 
-    // todo(pinussilvestrus): complete task
+    if (event.errors.keys.length) {
+      return;
+    }
+
+    setDialogOpen(false);
+
+    const variables = Object.entries(event.data).map(
+      ([ name, value ]) =>
+        ({
+          name,
+          value: JSON.stringify(value),
+        })
+    );
+
+    completeTask({
+      taskId: task.id,
+      variables
+    });
   };
 
   const handleAssignTask = () => {

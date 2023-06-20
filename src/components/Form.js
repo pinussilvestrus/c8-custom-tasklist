@@ -19,6 +19,8 @@ export function FormView(props) {
 
   const formRef = useRef(new Form());
 
+  // todo(pinussilvestrus): load variables
+
   useEffect(() => {
     onFormInit(formRef.current);
   }, [ formRef, onFormInit ]);

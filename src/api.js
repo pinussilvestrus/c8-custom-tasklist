@@ -99,6 +99,22 @@ const api = {
       body: JSON.stringify(body)
     });
   },
+  completeTask: ({
+    taskId,
+    ...body
+  }) => {
+    return new Request(
+      mergePathname(BASENAME, `/v1/tasks/${taskId}/complete`),
+      {
+        ...BASE_REQUEST_OPTIONS,
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body)
+      }
+    );
+  }
 };
 
 export { api };

@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { api } from '../api';
 import { request } from '../utils/request';
 
-const POLLING_INTERVAL = 500;
+const POLLING_INTERVAL = 2000;
 
 
 function useTasks(body) {
