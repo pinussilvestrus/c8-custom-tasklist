@@ -51,6 +51,21 @@ const api = {
         'Content-Type': 'application/json',
       },
     }),
+  getForm: ({
+    id,
+    processDefinitionKey,
+  }) => {
+    return new Request(mergePathname(
+      BASENAME,
+      `/v1/forms/${id}?processDefinitionKey=${processDefinitionKey}`
+    ), {
+      ...BASE_REQUEST_OPTIONS,
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+  },
   searchTasks: (body) => {
     return new Request(mergePathname(BASENAME, '/v1/tasks/search'), {
       ...BASE_REQUEST_OPTIONS,

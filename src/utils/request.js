@@ -11,7 +11,7 @@ export async function request(input) {
     if (response.ok) {
       return {
         response,
-        error: null,
+        error: null
       };
     }
 

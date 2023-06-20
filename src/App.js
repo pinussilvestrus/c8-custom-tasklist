@@ -1,8 +1,9 @@
-import { useTasks } from './queries/useTasks';
+import { useTasks } from './queries';
+
+import { Tasks } from './components';
 
 import './App.css';
 
-import Tasks from './components/Tasks';
 
 function App() {
 
