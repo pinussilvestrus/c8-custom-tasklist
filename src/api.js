@@ -76,7 +76,29 @@ const api = {
         'x-is-polling': 'true'
       },
     });
-  }
+  },
+  unassignTask: (taskId) => {
+    return new Request(
+      mergePathname(BASENAME, `/v1/tasks/${taskId}/unassign`),
+      {
+        ...BASE_REQUEST_OPTIONS,
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+  },
+  assignTask: (taskId, body) => {
+    return new Request(mergePathname(BASENAME, `/v1/tasks/${taskId}/assign`), {
+      ...BASE_REQUEST_OPTIONS,
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body)
+    });
+  },
 };
 
 export { api };

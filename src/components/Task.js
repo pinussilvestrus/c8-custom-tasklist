@@ -10,10 +10,16 @@ import Typography from '@mui/material/Typography';
 
 import FormDialog from './FormDialog';
 
+import { useAssignTask } from '../mutations';
+import { useUnassignTask } from '../mutations';
+
 export default function Task(props) {
   const { task } = props;
 
   const [ dialogOpen, setDialogOpen ] = useState(false);
+
+  const { mutateAsync: assignTask } = useAssignTask();
+  const { mutateAsync: unassignTask } = useUnassignTask();
 
   const handleOpenDialog = () => {
     setDialogOpen(true);
@@ -30,7 +36,16 @@ export default function Task(props) {
   };
 
   const handleAssignTask = () => {
+    assignTask({
+      taskId: task.id,
 
+      // todo(pinussilvestrus): get current user when not using access token
+      assignee: 'niklas.kiefer@camunda.com'
+    });
+  };
+
+  const handleUnassignTask = () => {
+    unassignTask(task.id);
   };
 
   return (
@@ -47,12 +62,24 @@ export default function Task(props) {
             { task.processName }
           </Typography>
           <Typography variant="body2">
-            { task.assignee ? task.assignee : 'Unassigned' }
+            { isAssigned(task) ? task.assignee : 'Unassigned' }
           </Typography>
         </CardContent>
         <CardActions>
-          <Button size="small">Pick Task</Button>
-          <Button size="small" variant="contained" onClick={ handleOpenDialog }>Open form</Button>
+          { !isAssigned(task) && (
+            <Button
+              size="small"
+              onClick={ handleAssignTask }>Pick Task</Button>
+          )}
+          { isAssigned(task) && (
+            <Button
+              size="small"
+              onClick={ handleUnassignTask }>Unassign</Button>
+          )}
+          <Button
+            disabled={ !isAssigned(task) }
+            size="small" variant="contained"
+            onClick={ handleOpenDialog }>Fill</Button>
         </CardActions>
       </Card>
       <FormDialog
@@ -62,4 +89,11 @@ export default function Task(props) {
         handleSubmit={ handleCompleteTask } />
     </Fragment>
   );
+}
+
+
+// helper ////////
+
+function isAssigned(task) {
+  return !!task.assignee;
 }
