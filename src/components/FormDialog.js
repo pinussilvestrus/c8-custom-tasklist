@@ -12,9 +12,7 @@ import { FormView } from './Form';
 
 import { useForm, useVariables } from '../queries';
 
-import { getFormId } from '../utils/getFormId';
-
-import { formatVariablesToFormData } from '../utils/formatVariablesToFormData';
+import { formatVariablesToFormData, getFormId } from '../utils';
 
 export default function FormDialog(props) {
 

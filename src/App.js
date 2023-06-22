@@ -1,15 +1,20 @@
+import { useState } from 'react';
+
 import { useTasks } from './queries';
 
-import { Tasks } from './components';
-
-import './App.css';
-
+import { Tasks, Titlebar } from './components';
 
 function App() {
 
   const { isLoading, error, data } = useTasks({
     state: 'CREATED'
   });
+
+  const [ allTasksEnabled, setAllTasksEnabled ] = useState(false);
+
+  const onModeChange = (allTasksEnabled) => {
+    setAllTasksEnabled(allTasksEnabled);
+  };
 
   if (isLoading) return 'Loading...';
 
@@ -21,9 +26,13 @@ function App() {
 
   return (
     <div className="App">
-      <h1>Custom Camunda Platform Tasklist</h1>
-
-      <Tasks tasks={ data } />
+      <Titlebar
+        title="My tasks"
+        allTasksEnabled={ allTasksEnabled }
+        onModeChange={ onModeChange } />
+      <Tasks
+        allTasksEnabled={ allTasksEnabled }
+        tasks={ data } />
     </div>
   );
 }

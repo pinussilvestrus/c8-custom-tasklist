@@ -19,6 +19,8 @@ import {
   useUnassignTask
 } from '../mutations';
 
+import { formatDate } from '../utils';
+
 // todo(pinussilvestrus): get current user when not using access token
 const ASSIGNEE = 'niklas.kiefer@camunda.com';
 
@@ -107,7 +109,7 @@ export default function Task(props) {
       <Card sx={ { minWidth: 275 } }>
         <CardContent>
           <Typography sx={ { fontSize: 14 } } color="text.secondary" gutterBottom>
-            { task.creationDate }
+            { formatDate(task.creationDate, true) }
           </Typography>
           <Typography variant="h5" component="div">
             { task.name }
@@ -116,22 +118,22 @@ export default function Task(props) {
             { task.processName }
           </Typography>
           <Typography variant="body2">
-            <Chip label={ task.assignee || 'Unassigned' } variant={ !isAssigned(task) ? 'outlined' : '' } />
+            <Chip label={ assignee || 'Unassigned' } variant={ !isAssigned(assignee) ? 'outlined' : '' } />
           </Typography>
         </CardContent>
         <CardActions>
-          { !isAssigned(task) && (
+          { !isAssigned(assignee) && (
             <Button
               size="small"
               onClick={ handleAssignTask }>Pick Task</Button>
           )}
-          { isAssigned(task) && (
+          { isAssigned(assignee) && (
             <Button
               size="small"
               onClick={ handleUnassignTask }>Unassign</Button>
           )}
           <Button
-            disabled={ !isAssigned(task) }
+            disabled={ !isAssigned(assignee) }
             size="small" variant="contained"
             onClick={ handleOpenDialog }>Fill</Button>
         </CardActions>
@@ -148,6 +150,6 @@ export default function Task(props) {
 
 // helper ////////
 
-function isAssigned(task) {
-  return !!task.assignee;
+function isAssigned(assignee) {
+  return !!assignee;
 }

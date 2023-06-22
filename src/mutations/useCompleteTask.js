@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import { api } from '../api';
-import { request } from '../utils/request';
+import { request } from '../utils';
 
 function useCompleteTask() {
   return useMutation({

@@ -1,4 +1,4 @@
-import { mergePathname } from './utils/mergePathname';
+import { mergePathname } from './utils';
 
 const BASENAME = process.env.REACT_APP_CAMUNDA_TASKLIST_BASE_URL;
 const AUTH_URL = process.env.REACT_APP_ZEEBE_AUTHORIZATION_SERVER_URL;
