@@ -7,6 +7,9 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import Chip from '@mui/material/Chip';
+
+import { enqueueSnackbar } from 'notistack';
 
 import FormDialog from './FormDialog';
 
@@ -16,8 +19,13 @@ import {
   useUnassignTask
 } from '../mutations';
 
+// todo(pinussilvestrus): get current user when not using access token
+const ASSIGNEE = 'niklas.kiefer@camunda.com';
+
 export default function Task(props) {
   const { task } = props;
+
+  const [ assignee, setAssignee ] = useState(task.assignee);
 
   const [ dialogOpen, setDialogOpen ] = useState(false);
 
@@ -33,10 +41,10 @@ export default function Task(props) {
     setDialogOpen(false);
   };
 
-  const handleCompleteTask = (event) => {
+  const handleCompleteTask = async (event) => {
     console.log('submit', event);
 
-    if (event.errors.keys.length) {
+    if (Object.keys(event.errors).length) {
       return;
     }
 
@@ -50,23 +58,48 @@ export default function Task(props) {
         })
     );
 
-    completeTask({
-      taskId: task.id,
-      variables
+    try {
+      await completeTask({
+        taskId: task.id,
+        variables
+      });
+    } catch (error) {
+      enqueueSnackbar(error.message, {
+        variant: 'error'
+      });
+    }
+
+    enqueueSnackbar('Task completed!', {
+      variant: 'success'
     });
   };
 
-  const handleAssignTask = () => {
-    assignTask({
-      taskId: task.id,
+  const handleAssignTask = async () => {
+    try {
+      await assignTask({
+        assignee: ASSIGNEE,
+        taskId: task.id
+      });
+    } catch (error) {
+      enqueueSnackbar(error.message, {
+        variant: 'error'
+      });
+    }
 
-      // todo(pinussilvestrus): get current user when not using access token
-      assignee: 'niklas.kiefer@camunda.com'
-    });
+    setAssignee(ASSIGNEE);
   };
 
-  const handleUnassignTask = () => {
-    unassignTask(task.id);
+  const handleUnassignTask = async () => {
+
+    try {
+      await unassignTask(task.id);
+    } catch (error) {
+      enqueueSnackbar(error.message, {
+        variant: 'error'
+      });
+    }
+
+    setAssignee(null);
   };
 
   return (
@@ -83,7 +116,7 @@ export default function Task(props) {
             { task.processName }
           </Typography>
           <Typography variant="body2">
-            { isAssigned(task) ? task.assignee : 'Unassigned' }
+            <Chip label={ task.assignee || 'Unassigned' } variant={ !isAssigned(task) ? 'outlined' : '' } />
           </Typography>
         </CardContent>
         <CardActions>

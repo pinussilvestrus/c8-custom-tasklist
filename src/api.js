@@ -114,6 +114,22 @@ const api = {
         body: JSON.stringify(body)
       }
     );
+  },
+
+  // todo(pinussilvestrus): support search with variableNames
+  searchVariables: ({
+    taskId
+  }) => {
+    return new Request(
+      mergePathname(BASENAME, `/v1/tasks/${taskId}/variables/search`),
+      {
+        ...BASE_REQUEST_OPTIONS,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }
+    );
   }
 };
 

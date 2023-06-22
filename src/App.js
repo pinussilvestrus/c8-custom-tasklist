@@ -17,7 +17,7 @@ function App() {
     return 'An error has occurred: ' + (error.variant === 'network-error' ? error.networkError.message : error.response.message);
   }
 
-  console.log(data);
+  console.log('Tasks', data);
 
   return (
     <div className="App">

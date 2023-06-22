@@ -10,6 +10,7 @@ import './Form.css';
 
 export function FormView(props) {
   const {
+    data,
     onFormInit,
     onSubmit,
     schema
@@ -18,8 +19,6 @@ export function FormView(props) {
   const formNodeRef = useRef(null);
 
   const formRef = useRef(new Form());
-
-  // todo(pinussilvestrus): load variables
 
   useEffect(() => {
     onFormInit(formRef.current);
@@ -37,7 +36,7 @@ export function FormView(props) {
 
   useEffect(() => {
     if (schema) {
-      formRef.current.importSchema(JSON.parse(schema));
+      formRef.current.importSchema(JSON.parse(schema), data);
     }
   }, [ schema ]);
 
